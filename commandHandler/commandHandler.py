@@ -4,7 +4,8 @@ commandHandler = {
   "inspiro": comFunc.get_inspiro_pic,
   "random": comFunc.random,
   "test": comFunc.get_test,
-  "jn": comFunc.get_yes_or_no
+  "jn": comFunc.get_yes_or_no,
+  "members": comFunc.get_all_members
 }
 
 functions = {

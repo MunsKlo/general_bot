@@ -25,3 +25,9 @@ def get_test(message):
 
 def get_yes_or_no(message):
     return f"{message.author.mention} {random.choice(['Ja', 'Nein'])}"
+
+
+def get_all_members(message):
+    for member in message.guild.members:
+        print(member)
+    return ""
