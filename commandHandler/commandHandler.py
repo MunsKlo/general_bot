@@ -5,9 +5,6 @@ commandHandler = {
   "random": comFunc.random,
   "test": comFunc.get_test,
   "jn": comFunc.get_yes_or_no,
-  "members": comFunc.get_all_members
-}
-
-functions = {
-  'right_channel': comFunc.right_channel,
+  "members": comFunc.get_all_members,
+  "@": comFunc.make_important_message
 }

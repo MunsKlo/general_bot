@@ -4,4 +4,3 @@ class User:
         self.name = _name
         self.status = ""
         self.role = ""
-        self.important_messages = []
