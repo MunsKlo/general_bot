@@ -65,10 +65,14 @@ def get_youtube(parameters):
     if len(parameters) == 1 and len(var.yt_vids) > 0:
         return var.yt_vids[random.randint(0, len(var.yt_vids) - 1)].link
 
-    if len(parameters) == 2:
-        print(len(var.yt_vids))
+    if len(parameters) == 2 and parameters[1] == 'list':
+        names = ''
         for obj in var.yt_vids:
-            print(obj.name)
+            names += f'{obj.name}\n'
+        return names
+
+    if len(parameters) == 2:
+        for obj in var.yt_vids:
             if parameters[1] == obj.name:
                 return obj.link
         return "Link not founded"
