@@ -1,5 +1,8 @@
 .venv
 venv/
 venv.bak/
-data/
+
 notes.txt
+important_messages.json
+users.json
+yt_vid.json

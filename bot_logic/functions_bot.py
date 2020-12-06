@@ -1,4 +1,5 @@
 import bot_logic.variables
+from model import user, important_message, yt_vid
 
 
 def right_channel(channel):
@@ -48,3 +49,42 @@ def fill_parameters_in_list(parameters):
     parameter_list.append(parameter)
     return parameter_list
 
+
+def check_if_user_register(name, list):
+    user_exist = False
+    for member in list:
+        if name == member.name:
+            user_exist = True
+            break
+
+    return user_exist
+
+
+def create_user(name):
+    return user.User(name)
+
+
+def convert_dict_in_obj_list(list_obj, type_obj):
+
+    new_list = []
+
+    if type_obj == 'user':
+        for obj in list_obj:
+            new_list.append(user.User(obj['name']))
+
+    if type_obj == 'important_message':
+        for obj in list_obj:
+            new_list.append(important_message.ImportantMessage(obj['message'], obj['channel'], obj['user']))
+
+    if type_obj == 'yt_vid':
+        for obj in list_obj:
+            new_list.append(yt_vid.Video(obj['link'], obj['name']))
+
+    return new_list
+
+
+def check_link(link, yt_link):
+    for i in range(len(yt_link)):
+        if link[i] != yt_link[i]:
+            return False
+    return True

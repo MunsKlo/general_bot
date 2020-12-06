@@ -1,10 +1,9 @@
 import random
 import requests
-import json
-from model import important_message
 from variables import variables as var
-from bot_logic import InputOutputJSON
-
+from data import InputOutputJSON
+from model import  user, important_message, yt_vid
+from bot_logic import functions_bot
 
 
 def get_inspiro_pic(parameters):
@@ -33,16 +32,62 @@ def get_all_members(parameters):
 
 
 def make_important_message(parameters):
+
     if parameters[1] == 'clear' and len(parameters) == 2:
         var.important_messages = []
-        InputOutputJSON.write_json_file('PROBLEM', 'E:\Python\general_bot\data\important_messages.json')
+        InputOutputJSON.write_json_file([], var.important_messages_file, True)
         return 'Alle wichtigen Nachrichten wurden gelöscht'
+
+    elif parameters[1] == 'print' and len(parameters) == 2:
+        text = ''
+        for obj in var.important_messages:
+            text += f'{obj.user} schrieb: "{obj.message}" in {obj.channel}\n'
+        if text == '':
+            text = 'Keine Nachrichten vorhanden'
+        return text
+
     else:
         message = parameters[0]
-        user_message = {'content': str(message.content[3:len(message.content)]), 'channel': str(message.channel), 'user': str(message.author)}
-        print(user_message['user'])
+        var.important_messages.append(important_message.ImportantMessage(str(message.content), str(message.channel), str(message.author)))
 
-        var.important_messages.append(user_message)
-        InputOutputJSON.write_json_file(var.important_messages, 'E:\Python\general_bot\data\important_messages.json')
+        InputOutputJSON.write_json_file(var.important_messages, var.important_messages_file)
+
     return ''
+
+
+def get_youtube(parameters):
+
+    if len(parameters) == 4 and parameters[1] == 'add' and functions_bot.check_link(parameters[2] ,var.yt_link):
+        var.yt_vids.append(yt_vid.Video(parameters[2], parameters[3]))
+        InputOutputJSON.write_json_file(var.yt_vids, var.yt_vids_file)
+        return 'Erfolgreich hinzugefügt'
+
+    if len(parameters) == 1 and len(var.yt_vids) > 0:
+        return var.yt_vids[random.randint(0, len(var.yt_vids) - 1)].link
+
+    if len(parameters) == 2:
+        print(len(var.yt_vids))
+        for obj in var.yt_vids:
+            print(obj.name)
+            if parameters[1] == obj.name:
+                return obj.link
+        return "Link not founded"
+
+    else:
+        return 'Something went wrong!'
+
+
+def get_users(parameters):
+    text = ''
+    for user in var.users:
+        text += user.name + '\n'
+    return text
+
+
+def get_commands(parameters):
+    text = '```'
+    for i in var.helper:
+        text += f'{i} = {var.helper[i]}\n'
+    return text + '```'
+
 
