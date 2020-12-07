@@ -54,7 +54,6 @@ class MyClient(discord.Client):
                 await message.channel.send(bot_message)
 
 
-
 # Client erstellt und mit dem Bot verbunden
 client = MyClient()
 client.run(token)

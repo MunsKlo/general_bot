@@ -88,3 +88,44 @@ def check_link(link, yt_link):
         if link[i] != yt_link[i]:
             return False
     return True
+
+
+def name_of_obj_already_exist(name, obj_list):
+    for obj in obj_list:
+        if obj.name == name:
+            return True
+    return False
+
+
+def cut_decisions(decisions):
+    if not len(decisions):
+        return 'No decisions'
+
+    decision = ''
+    decision_list = []
+    string_with_whitespace = False
+    for index in range(len(decisions)):
+        if decisions[index] == '"' and not string_with_whitespace:
+            string_with_whitespace = True
+            continue
+
+        if decisions[index] == '"' and string_with_whitespace:
+            string_with_whitespace = False
+            decision_list.append(decision)
+            decision = ''
+            continue
+
+        if decisions[index] == ' ' and not string_with_whitespace and len(decision):
+            decision_list.append(decision)
+            decision = ''
+
+        elif decisions[index] == ' ' and not string_with_whitespace:
+            continue
+
+        else:
+            decision += decisions[index]
+
+    if len(decision):
+        decision_list.append(decision)
+
+    return decision_list

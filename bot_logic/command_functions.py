@@ -2,7 +2,7 @@ import random
 import requests
 from variables import variables as var
 from data import InputOutputJSON
-from model import  user, important_message, yt_vid
+from model import user, important_message, yt_vid
 from bot_logic import functions_bot
 
 
@@ -14,7 +14,10 @@ def get_inspiro_pic(parameters):
 
 
 def get_random_number(parameters):
-    return random.randint(1, parameters[1])
+    try:
+        return str(random.randint(1, int(parameters[1])))
+    except:
+        return 'Something went wrong!'
 
 
 def get_test(parameters):
@@ -32,7 +35,6 @@ def get_all_members(parameters):
 
 
 def make_important_message(parameters):
-
     if parameters[1] == 'clear' and len(parameters) == 2:
         var.important_messages = []
         InputOutputJSON.write_json_file([], var.important_messages_file, True)
@@ -48,7 +50,8 @@ def make_important_message(parameters):
 
     else:
         message = parameters[0]
-        var.important_messages.append(important_message.ImportantMessage(str(message.content), str(message.channel), str(message.author)))
+        var.important_messages.append(
+            important_message.ImportantMessage(str(message.content), str(message.channel), str(message.author)))
 
         InputOutputJSON.write_json_file(var.important_messages, var.important_messages_file)
 
@@ -56,11 +59,14 @@ def make_important_message(parameters):
 
 
 def get_youtube(parameters):
+    if len(parameters) == 4 and parameters[1] == 'add' and functions_bot.check_link(parameters[2], var.yt_link):
 
-    if len(parameters) == 4 and parameters[1] == 'add' and functions_bot.check_link(parameters[2] ,var.yt_link):
+        if functions_bot.name_of_obj_already_exist(parameters[3], var.yt_vids):
+            return 'The name already exist'
+
         var.yt_vids.append(yt_vid.Video(parameters[2], parameters[3]))
         InputOutputJSON.write_json_file(var.yt_vids, var.yt_vids_file)
-        return 'Erfolgreich hinzugefügt'
+        return 'Successfully added'
 
     if len(parameters) == 1 and len(var.yt_vids) > 0:
         return var.yt_vids[random.randint(0, len(var.yt_vids) - 1)].link
@@ -83,8 +89,14 @@ def get_youtube(parameters):
 
 def get_users(parameters):
     text = ''
-    for user in var.users:
-        text += user.name + '\n'
+
+    if parameters[1] == 'rand' and len(parameters) == 2:
+        text = str(var.users[random.randint(0, len(var.users) - 1)].name)
+
+    if len(parameters) == 1:
+        for obj in var.users:
+            text += obj.name + '\n'
+
     return text
 
 
@@ -95,3 +107,8 @@ def get_commands(parameters):
     return text + '```'
 
 
+def get_decision(parameters):
+    message = parameters[0]
+    decisions_string = functions_bot.cut_parameters_from_command(str(message.content))
+    decisions_list = functions_bot.cut_decisions(decisions_string)
+    return f"{parameters[0].author.mention} {decisions_list[random.randint(0, len(decisions_list) - 1)]}"
