@@ -2,7 +2,7 @@ import random
 import requests
 from variables import variables as var
 from data import InputOutputJSON
-from model import user, important_message, yt_vid
+from model import user, important_message, yt_vid, chuck_norris
 from bot_logic import functions_bot
 
 
@@ -69,7 +69,8 @@ def get_youtube(parameters):
         return 'Successfully added'
 
     if len(parameters) == 1 and len(var.yt_vids) > 0:
-        return var.yt_vids[random.randint(0, len(var.yt_vids) - 1)].link
+        video = var.yt_vids[random.randint(0, len(var.yt_vids) - 1)]
+        return f'Name: {video.name}\n{video.link}'
 
     if len(parameters) == 2 and parameters[1] == 'list':
         names = ''
@@ -90,14 +91,15 @@ def get_youtube(parameters):
 def get_users(parameters):
     text = ''
 
-    if parameters[1] == 'rand' and len(parameters) == 2:
-        text = str(var.users[random.randint(0, len(var.users) - 1)].name)
-
     if len(parameters) == 1:
         for obj in var.users:
             text += obj.name + '\n'
+        return text
 
-    return text
+    if parameters[1] == 'rand' and len(parameters) == 2:
+        return str(var.users[random.randint(0, len(var.users) - 1)].name)
+
+    return 'Something went wrong'
 
 
 def get_commands(parameters):
@@ -112,3 +114,50 @@ def get_decision(parameters):
     decisions_string = functions_bot.cut_parameters_from_command(str(message.content))
     decisions_list = functions_bot.cut_decisions(decisions_string)
     return f"{parameters[0].author.mention} {decisions_list[random.randint(0, len(decisions_list) - 1)]}"
+
+
+def get_chuck_norris(parameters):
+    response = requests.get('https://api.chucknorris.io/jokes/random')
+    json_dict = response.json()
+    joke = chuck_norris.ChuckNorris(json_dict['id'], json_dict['url'], json_dict['value'])
+    return f'{joke.url}\n```{joke.joke}```'
+
+
+def get_giphy_gif(parameters):
+    payload = {'api_key': 'AbKxlHYeNnK7yB9kDrF9gUmHMV9pbVOF', 'Content-Type': 'application/json', 'tag': ''}
+    json_dict = {}
+
+    if parameters[1] == 'random' and len(parameters) == 2:
+        response = requests.get('https://api.giphy.com/v1/gifs/random', params=payload)
+        json_dict = response.json()
+
+    if parameters[1] == 'random' and len(parameters) == 3:
+        payload['tag'] = parameters[2]
+        response = requests.get('https://api.giphy.com/v1/gifs/random', params=payload)
+        json_dict = response.json()
+
+    return f'{json_dict["data"]["url"]}'
+
+
+def get_advice(parameters):
+    response = requests.get('https://api.adviceslip.com/advice')
+    json_dict = response.json()
+    return f'```{json_dict["slip"]["advice"]}```'
+
+
+def get_cat_pic(parameters):
+    response = requests.get('https://aws.random.cat/meow')
+    json_dict = response.json()
+    return json_dict['file']
+
+
+def get_dog_pic(parameters):
+    response = requests.get('https://random.dog/woof.json')
+    json_dict = response.json()
+    return json_dict['url']
+
+
+def get_fox_pic(parameters):
+    response = requests.get('https://randomfox.ca/floof/')
+    json_dict = response.json()
+    return json_dict['image']

@@ -10,5 +10,11 @@ commandHandler = {
   "vid": comFunc.get_youtube,
   "help": comFunc.get_commands,
   "@": comFunc.make_important_message,
-  "decision": comFunc.get_decision
+  "decision": comFunc.get_decision,
+  "chucknorris": comFunc.get_chuck_norris,
+  "giphy": comFunc.get_giphy_gif,
+  "advice": comFunc.get_advice,
+  "cat": comFunc.get_cat_pic,
+  "dog": comFunc.get_dog_pic,
+  "fox": comFunc.get_fox_pic,
 }
