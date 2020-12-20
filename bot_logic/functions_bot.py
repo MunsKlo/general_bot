@@ -11,7 +11,7 @@ def get_command_from_content(text):
     new_text = ''
 
     for letter in text:
-        if letter == ' ':
+        if letter == ' ' or letter == '\n':
             break
         new_text += letter
     return new_text[1:len(new_text)]
@@ -20,7 +20,7 @@ def get_command_from_content(text):
 def get_parameter_list(text, message):
     parameter_list = [message]
 
-    if ' ' in text:
+    if ' ' in text or '\n' in text:
         parameters = cut_parameters_from_command(text)
         parameter_list += fill_parameters_in_list(parameters)
 
@@ -30,7 +30,7 @@ def get_parameter_list(text, message):
 def cut_parameters_from_command(text):
     new_text = ''
     for index in range(len(text)):
-        if text[index] == ' ':
+        if text[index] == ' ' or text[index] == '\n':
             new_text = text[index + 1:len(text)]
             break
     return new_text

@@ -9,6 +9,7 @@ important_messages_file = 'important_messages.json'
 yt_vids_file = 'yt_vids.json'
 
 #CheckStates
+path_data = ''
 
 yt_link = 'https://www.youtube.com/watch?'
 

@@ -5,7 +5,7 @@ from bot_logic import admin_logic, functions_bot
 from data import InputOutputJSON
 from variables import variables as var
 
-token = os.environ.get('General_Bot')
+token = os.environ.get('token')
 
 comHandler = commandHandler.commandHandler.commandHandler
 
@@ -18,6 +18,17 @@ class MyClient(discord.Client):
     # LogIn
     async def on_ready(self):
         print("Ich bin eingeloggt!")
+
+        var.path_data = str(__file__)[0:len(__file__) - 12] + 'data/'
+
+        if not os.path.exists(var.path_data + var.users_file):
+            with open(var.path_data + var.users_file, 'w'): pass
+
+        if not os.path.exists(var.path_data + var.important_messages_file):
+            with open(var.path_data + var.important_messages_file, 'w'): pass
+
+        if not os.path.exists(var.path_data + var.yt_vids_file):
+            with open(var.path_data + var.yt_vids_file, 'w'): pass
 
         var.important_messages = functions_bot.convert_dict_in_obj_list(InputOutputJSON.read_json_file(important_messages_file), 'important_message')
         var.users = functions_bot.convert_dict_in_obj_list(InputOutputJSON.read_json_file(users_file), 'user')
@@ -33,13 +44,13 @@ class MyClient(discord.Client):
             var.users.append(functions_bot.create_user(str(message.author)))
             InputOutputJSON.write_json_file(var.users, users_file)
 
-        if functions_bot.right_channel(str(message.channel)) and message.content.startswith('.'):
+        if functions_bot.right_channel(str(message.channel)) and message.content.startswith('.') or message.content.startswith('.@'):
             bot_message = ''
             result = ''
 
             command = functions_bot.get_command_from_content(message.content)
             parameter_list = functions_bot.get_parameter_list(message.content, message)
-            # print(parameter_list)
+            print(parameter_list)
 
             if command in comHandler:
                 function = comHandler[command]

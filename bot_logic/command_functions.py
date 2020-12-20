@@ -43,7 +43,7 @@ def make_important_message(parameters):
     elif parameters[1] == 'print' and len(parameters) == 2:
         text = ''
         for obj in var.important_messages:
-            text += f'{obj.user} schrieb: "{obj.message}" in {obj.channel}\n'
+            text += f'{obj.user} schrieb: "{str(obj.message)}" in {obj.channel}\n'
         if text == '':
             text = 'Keine Nachrichten vorhanden'
         return text
@@ -51,7 +51,7 @@ def make_important_message(parameters):
     else:
         message = parameters[0]
         var.important_messages.append(
-            important_message.ImportantMessage(str(message.content), str(message.channel), str(message.author)))
+            important_message.ImportantMessage(str(message.content)[3:len(message.content)], str(message.channel), str(message.author)))
 
         InputOutputJSON.write_json_file(var.important_messages, var.important_messages_file)
 
@@ -125,7 +125,7 @@ def get_chuck_norris(parameters):
 
 def get_giphy_gif(parameters):
     payload = {'api_key': 'AbKxlHYeNnK7yB9kDrF9gUmHMV9pbVOF', 'Content-Type': 'application/json', 'tag': ''}
-    json_dict = {}
+    json_dict = {'data': {'url': 'Something went wrong!'}}
 
     if parameters[1] == 'random' and len(parameters) == 2:
         response = requests.get('https://api.giphy.com/v1/gifs/random', params=payload)
