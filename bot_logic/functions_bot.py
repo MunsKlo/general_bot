@@ -1,5 +1,6 @@
 import bot_logic.variables
 from model import user, important_message, yt_vid
+from variables import variables as var
 
 
 def right_channel(channel):
@@ -60,8 +61,8 @@ def check_if_user_register(name, list):
     return user_exist
 
 
-def create_user(name):
-    return user.User(name)
+def create_user(author):
+    return user.User(author.id, str(author))
 
 
 def convert_dict_in_obj_list(list_obj, type_obj):
@@ -70,7 +71,7 @@ def convert_dict_in_obj_list(list_obj, type_obj):
 
     if type_obj == 'user':
         for obj in list_obj:
-            new_list.append(user.User(obj['name']))
+            new_list.append(user.User(obj['id'], obj['name'], obj['msg_cursor']))
 
     if type_obj == 'important_message':
         for obj in list_obj:
@@ -129,3 +130,84 @@ def cut_decisions(decisions):
         decision_list.append(decision)
 
     return decision_list
+
+#MSG functions
+
+def get_user(id):
+    for obj in var.users:
+        if id == obj.id:
+            return obj
+    return 'ERROR'
+
+
+def get_cursor_target(current_user):
+    if len(current_user.msg_cursor):
+        return current_user.msg_cursor.split('/')
+    return ''
+
+
+def get_cursor(cursor_target):
+    cursor = var.msgs
+    for cursor_cat in cursor_target:
+        cursor = var.msgs[cursor_cat]
+    return cursor
+
+
+def info_msg_dir(current_user):
+    return f'Your position {current_user.msg_cursor}\n' \
+           f'```' \
+           f'{var.msgs}' \
+           f'```'
+
+
+def create_category(cat, current_user):
+    cursor_target = get_cursor_target(current_user)
+    cursor = var.msgs
+
+    if not len(cursor_target):
+        var.msgs[cat] = {}
+        return 'Kategorie wurde erfolgreich erstellt!'
+
+    for cursor_cat in cursor_target:
+        if cursor == var.msgs:
+            cursor = var.msgs[cursor_cat]
+        else:
+            cursor = cursor[cursor_cat]
+    cursor[cat] = {}
+    return 'Kategorie wurde erfolgreich erstellt!'
+
+
+def delete_category(cat, current_user):
+    cursor_target = get_cursor_target(current_user)
+    cursor = var.msgs
+
+    if not len(cursor_target) and cat in cursor:
+        cursor.pop(cat)
+        return 'Kategorie wurde erfolgreich gelöscht'
+
+    if len(cursor_target):
+        for cursor_cat in cursor_target:
+            if cursor == var.msgs:
+                cursor = var.msgs[cursor_cat]
+            else:
+                cursor = cursor[cursor_cat]
+        if cat in cursor:
+            cursor.pop(cat)
+            return 'Kategorie wurde erfolgreich gelöscht'
+    return 'Something went wrong'
+
+
+def set_user_cursor(next_cat, current_user):
+
+    if next_cat == '..':
+        current_user.msg_cursor_back()
+        return f'Your position: {current_user.msg_cursor}'
+
+    cursor_target = get_cursor_target(current_user)
+    cursor = get_cursor(cursor_target)
+
+    if next_cat in cursor:
+        current_user.msg_cursor_next(next_cat)
+        return f'Your position: {current_user.msg_cursor}'
+    else:
+        return f'{next_cat} wurde nicht gefunden!'

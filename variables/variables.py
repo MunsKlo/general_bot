@@ -7,6 +7,7 @@ yt_vids = []
 users_file = 'users.json'
 important_messages_file = 'important_messages.json'
 yt_vids_file = 'yt_vids.json'
+msgs_file = 'msgs.json'
 
 #CheckStates
 path_data = ''
@@ -34,3 +35,5 @@ helper = {
     ".giphy random <tag>": "Give you a random gif from a specific topic",
     ".chucknorris": "Get a Chuck Norris joke",
 }
+
+msgs = {}

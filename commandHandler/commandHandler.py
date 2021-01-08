@@ -17,4 +17,5 @@ commandHandler = {
   "cat": comFunc.get_cat_pic,
   "dog": comFunc.get_dog_pic,
   "fox": comFunc.get_fox_pic,
+  'msg': comFunc.create_msg,
 }

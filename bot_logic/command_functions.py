@@ -161,3 +161,32 @@ def get_fox_pic(parameters):
     response = requests.get('https://randomfox.ca/floof/')
     json_dict = response.json()
     return json_dict['image']
+
+
+def create_msg(parameters):
+    result = ''
+
+    if len(parameters) < 2:
+        return 'There is no message or category!'
+
+    current_user = functions_bot.get_user(parameters[0].author.id)
+
+    if current_user == 'ERROR':
+        return 'User not found'
+
+    if parameters[1] == 'info':
+        result = functions_bot.info_msg_dir(current_user)
+
+    if parameters[1] == 'new' and len(parameters) == 4:
+        result = functions_bot.create_category(parameters[len(parameters) - 1], current_user)
+
+    if parameters[1] == 'del' and len(parameters) == 4:
+        result = functions_bot.delete_category(parameters[len(parameters) - 1], current_user)
+
+    if parameters[1] == 'cd' and len(parameters) == 3:
+        result = functions_bot.set_user_cursor(parameters[len(parameters) - 1], current_user)
+
+    InputOutputJSON.write_json_file(var.msgs, var.msgs_file)
+    InputOutputJSON.write_json_file(var.users, var.users_file)
+
+    return result

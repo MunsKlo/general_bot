@@ -30,18 +30,21 @@ class MyClient(discord.Client):
         if not os.path.exists(var.path_data + var.yt_vids_file):
             with open(var.path_data + var.yt_vids_file, 'w'): pass
 
+        if not os.path.exists((var.path_data + var.msgs_file)):
+            with open(var.path_data + var.msgs_file, 'w'): pass
+
         var.important_messages = functions_bot.convert_dict_in_obj_list(InputOutputJSON.read_json_file(important_messages_file), 'important_message')
         var.users = functions_bot.convert_dict_in_obj_list(InputOutputJSON.read_json_file(users_file), 'user')
         var.yt_vids = functions_bot.convert_dict_in_obj_list(InputOutputJSON.read_json_file(var.yt_vids_file), 'yt_vid')
+        var.msgs = InputOutputJSON.read_json_file(var.msgs_file)
 
     # MessageSend
     async def on_message(self, message):
-
         if message.author == client.user:
             return
 
         if not functions_bot.check_if_user_register(str(message.author), var.users):
-            var.users.append(functions_bot.create_user(str(message.author)))
+            var.users.append(functions_bot.create_user(message.author))
             InputOutputJSON.write_json_file(var.users, users_file)
 
         if functions_bot.right_channel(str(message.channel)) and message.content.startswith('.') or message.content.startswith('.@'):
