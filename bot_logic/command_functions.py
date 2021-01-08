@@ -163,7 +163,7 @@ def get_fox_pic(parameters):
     return json_dict['image']
 
 
-def create_msg(parameters):
+def handle_notes(parameters):
     result = ''
 
     if len(parameters) < 2:
@@ -177,14 +177,62 @@ def create_msg(parameters):
     if parameters[1] == 'info':
         result = functions_bot.info_msg_dir(current_user)
 
-    if parameters[1] == 'new' and len(parameters) == 4:
-        result = functions_bot.create_category(parameters[len(parameters) - 1], current_user)
+    if parameters[1] == 'titles':
+        result = functions_bot.get_titles(current_user)
 
-    if parameters[1] == 'del' and len(parameters) == 4:
-        result = functions_bot.delete_category(parameters[len(parameters) - 1], current_user)
+    if parameters[1] == 'note':
+        cat_string = functions_bot.cut_parameters_from_command(str(parameters[0].content))
+        cat = functions_bot.cut_decisions(cat_string)[1:]
 
-    if parameters[1] == 'cd' and len(parameters) == 3:
-        result = functions_bot.set_user_cursor(parameters[len(parameters) - 1], current_user)
+        result = functions_bot.get_note(cat[0], current_user)
+
+    if parameters[1] == 'new' and parameters[2] == 'cat':
+        cat_string = functions_bot.cut_parameters_from_command(str(parameters[0].content))
+        cat = functions_bot.cut_decisions(cat_string)[2:]
+
+        if len(cat) != 1:
+            return 'Something went wrong'
+
+        if '/' in cat[0]:
+            return 'Keine / in Namen!'
+
+        result = functions_bot.create_category(cat[0], current_user)
+
+    if parameters[1] == 'del' and parameters[2] == 'cat':
+        cat_string = functions_bot.cut_parameters_from_command(str(parameters[0].content))
+        cat = functions_bot.cut_decisions(cat_string)[2:]
+
+        if len(cat) != 1:
+            return 'Something went wrong'
+
+        result = functions_bot.delete_category(cat[0], current_user)
+
+    if parameters[1] == 'new' and parameters[2] == 'msg':
+        msg_string = functions_bot.cut_parameters_from_command(str(parameters[0].content))
+        msg = functions_bot.cut_decisions(msg_string)[2:]
+
+        if len(msg) != 2:
+            return 'Something went wrong'
+
+        result = functions_bot.create_msg(msg[0], msg[1], current_user)
+
+    if parameters[1] == 'del' and parameters[2] == 'msg':
+        msg_string = functions_bot.cut_parameters_from_command(str(parameters[0].content))
+        msg = functions_bot.cut_decisions(msg_string)[2:]
+
+        if len(msg) != 1:
+            return 'Something went wrong'
+
+        result = functions_bot.delete_msg(msg[0], current_user)
+
+    if parameters[1] == 'cd':
+        cat_string = functions_bot.cut_parameters_from_command(str(parameters[0].content))
+        cat = functions_bot.cut_decisions(cat_string)[1:]
+
+        if len(cat) != 1:
+            return 'Something went wrong'
+
+        result = functions_bot.set_user_cursor(cat[0], current_user)
 
     InputOutputJSON.write_json_file(var.msgs, var.msgs_file)
     InputOutputJSON.write_json_file(var.users, var.users_file)

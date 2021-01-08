@@ -133,6 +133,7 @@ def cut_decisions(decisions):
 
 #MSG functions
 
+
 def get_user(id):
     for obj in var.users:
         if id == obj.id:
@@ -149,7 +150,10 @@ def get_cursor_target(current_user):
 def get_cursor(cursor_target):
     cursor = var.msgs
     for cursor_cat in cursor_target:
-        cursor = var.msgs[cursor_cat]
+        if cursor == var.msgs:
+            cursor = var.msgs[cursor_cat]
+        else:
+            cursor = cursor[cursor_cat]
     return cursor
 
 
@@ -162,38 +166,54 @@ def info_msg_dir(current_user):
 
 def create_category(cat, current_user):
     cursor_target = get_cursor_target(current_user)
-    cursor = var.msgs
+    cursor = get_cursor(cursor_target)
 
-    if not len(cursor_target):
-        var.msgs[cat] = {}
-        return 'Kategorie wurde erfolgreich erstellt!'
+    if cat in cursor:
+        return f'Der Name der Kategorie existiert bereits!\n' \
+               f'```{cat} : {cursor[cat]}```'
 
-    for cursor_cat in cursor_target:
-        if cursor == var.msgs:
-            cursor = var.msgs[cursor_cat]
-        else:
-            cursor = cursor[cursor_cat]
     cursor[cat] = {}
     return 'Kategorie wurde erfolgreich erstellt!'
 
 
 def delete_category(cat, current_user):
     cursor_target = get_cursor_target(current_user)
-    cursor = var.msgs
+    cursor = get_cursor(cursor_target)
 
-    if not len(cursor_target) and cat in cursor:
+    if cat in cursor:
+
+        if type(cursor[cat]) == str:
+            return "Du kannst keinen Text mit dem 'del cat' Befehl löschen"
+
         cursor.pop(cat)
         return 'Kategorie wurde erfolgreich gelöscht'
 
-    if len(cursor_target):
-        for cursor_cat in cursor_target:
-            if cursor == var.msgs:
-                cursor = var.msgs[cursor_cat]
-            else:
-                cursor = cursor[cursor_cat]
-        if cat in cursor:
-            cursor.pop(cat)
-            return 'Kategorie wurde erfolgreich gelöscht'
+    return 'Something went wrong'
+
+
+def create_msg(title, txt, current_user):
+    cursor_target = get_cursor_target(current_user)
+    cursor = get_cursor(cursor_target)
+
+    if title in cursor:
+        return f'Der Name der Kategorie existiert bereits!\n' \
+               f'```{title} : {cursor[title]}```'
+
+    cursor[title] = txt
+    return 'Text wurde erfolgreich erstellt und hinzugefügt!'
+
+
+def delete_msg(title, current_user):
+    cursor_target = get_cursor_target(current_user)
+    cursor = get_cursor(cursor_target)
+
+    if title in cursor:
+
+        if type(cursor[title]) == dict:
+            return "Du kannst keine Ordner mit dem 'del msg' Befehl löschen"
+
+        cursor.pop(title)
+        return 'Text wurde erfolgreich gelöscht'
     return 'Something went wrong'
 
 
@@ -211,3 +231,28 @@ def set_user_cursor(next_cat, current_user):
         return f'Your position: {current_user.msg_cursor}'
     else:
         return f'{next_cat} wurde nicht gefunden!'
+
+
+def get_note(title, current_user):
+    cursor_target = get_cursor_target(current_user)
+    cursor = get_cursor(cursor_target)
+
+    if title in cursor:
+        return f'```' \
+               f'Title: {title}\n' \
+               f'Note: {cursor[title]}' \
+               f'```'
+
+    return 'Notiz wurde nicht gefunden!'
+
+
+def get_titles(current_user):
+    cursor_target = get_cursor_target(current_user)
+    cursor = get_cursor(cursor_target)
+
+    titles = [title for title in cursor if type(cursor[title]) == str]
+
+    if not len(titles):
+        return 'Keine Notizen hier!'
+
+    return '\n'.join(titles)
