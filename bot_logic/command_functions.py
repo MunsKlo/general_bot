@@ -225,6 +225,11 @@ def handle_notes(parameters):
 
         result = functions_bot.delete_msg(msg[0], current_user)
 
+    if parameters[1] == 'purge':
+        var.msgs = {}
+        functions_bot.set_cursor_to_begin()
+        return 'Alle Notizen und Kategorien wurden gesäubert!'
+
     if parameters[1] == 'cd':
         cat_string = functions_bot.cut_parameters_from_command(str(parameters[0].content))
         cat = functions_bot.cut_decisions(cat_string)[1:]

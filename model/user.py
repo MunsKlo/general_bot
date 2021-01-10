@@ -26,3 +26,6 @@ class User:
 
             i -= 1
         self.msg_cursor = self.msg_cursor[0:i]
+
+    def set_cursor_to_start(self):
+        self.msg_cursor = ''

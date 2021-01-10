@@ -256,3 +256,7 @@ def get_titles(current_user):
         return 'Keine Notizen hier!'
 
     return '\n'.join(titles)
+
+
+def set_cursor_to_begin():
+    [current_user.set_cursor_to_start() for current_user in var.users]
