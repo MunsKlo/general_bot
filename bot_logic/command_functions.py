@@ -2,7 +2,7 @@ import random
 import requests
 from variables import variables as var
 from data import InputOutputJSON
-from model import user, important_message, yt_vid, chuck_norris
+from model import user, important_message, yt_vid, chuck_norris, quote
 from bot_logic import functions_bot
 
 
@@ -110,10 +110,7 @@ def get_commands(parameters):
 
 
 def get_decision(parameters):
-    message = parameters[0]
-    decisions_string = functions_bot.cut_parameters_from_command(str(message.content))
-    decisions_list = functions_bot.cut_decisions(decisions_string)
-    return f"{parameters[0].author.mention} {decisions_list[random.randint(0, len(decisions_list) - 1)]}"
+    return f"{parameters[0].author.mention} {parameters[random.randint(1, len(parameters) - 1)]}"
 
 
 def get_chuck_norris(parameters):
@@ -243,3 +240,25 @@ def handle_notes(parameters):
     InputOutputJSON.write_json_file(var.users, var.users_file)
 
     return result
+
+
+def get_stalker(parameters):
+    current_user = functions_bot.get_user(716737561791299654)
+    if current_user == 'ERROR':
+        return f"Nici, it is your time to shine!"
+    return f"{current_user.mention}, it is your time to shine!"
+
+
+def get_quote(parameters):
+    if parameters[1] == 'add' and len(parameters) == 3:
+        current_quote = quote.Quote(str(parameters[0].author), parameters[2])
+        var.quotes.append(current_quote)
+        InputOutputJSON.write_json_file(var.quotes, var.quotes_file)
+        return "Erfolgreich hinzugefügt!"
+
+    if parameters[1] == 'rand' and len(parameters) == 2:
+        current_quote = random.choice(var.quotes)
+        return f"{current_quote.creator} lehrte uns:" \
+               f"```{current_quote.quote}```"
+
+    return "Something went wrong"

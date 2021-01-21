@@ -5,7 +5,7 @@ from bot_logic import admin_logic, functions_bot
 from data import InputOutputJSON
 from variables import variables as var
 
-token = os.environ.get('token')
+token = os.environ.get('token_raski')
 
 comHandler = commandHandler.commandHandler.commandHandler
 
@@ -33,9 +33,13 @@ class MyClient(discord.Client):
         if not os.path.exists((var.path_data + var.msgs_file)):
             with open(var.path_data + var.msgs_file, 'w'): pass
 
+        if not os.path.exists((var.path_data + var.quotes_file)):
+            with open(var.path_data + var.quotes_file, 'w'): pass
+
         var.important_messages = functions_bot.convert_dict_in_obj_list(InputOutputJSON.read_json_file(important_messages_file), 'important_message')
         var.users = functions_bot.convert_dict_in_obj_list(InputOutputJSON.read_json_file(users_file), 'user')
         var.yt_vids = functions_bot.convert_dict_in_obj_list(InputOutputJSON.read_json_file(var.yt_vids_file), 'yt_vid')
+        var.quotes = functions_bot.convert_dict_in_obj_list(InputOutputJSON.read_json_file(var.quotes_file), 'quote')
         var.msgs = InputOutputJSON.read_json_file(var.msgs_file)
 
     # MessageSend
@@ -47,7 +51,7 @@ class MyClient(discord.Client):
             var.users.append(functions_bot.create_user(message.author))
             InputOutputJSON.write_json_file(var.users, users_file)
 
-        if functions_bot.right_channel(str(message.channel)) and message.content.startswith('.') or message.content.startswith('.@'):
+        if message.content.startswith('.') or message.content.startswith('.@'):
             bot_message = ''
             result = ''
 
