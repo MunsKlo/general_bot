@@ -1,5 +1,5 @@
 import bot_logic.variables
-from model import user, important_message, yt_vid
+from model import user, important_message, yt_vid, quote
 from variables import variables as var
 
 
@@ -23,7 +23,7 @@ def get_parameter_list(text, message):
 
     if ' ' in text or '\n' in text:
         parameters = cut_parameters_from_command(text)
-        parameter_list += fill_parameters_in_list(parameters)
+        parameter_list += cut_decisions(parameters)
 
     return parameter_list
 
@@ -62,7 +62,7 @@ def check_if_user_register(name, list):
 
 
 def create_user(author):
-    return user.User(author.id, str(author))
+    return user.User(author.id, str(author), author.mention)
 
 
 def convert_dict_in_obj_list(list_obj, type_obj):
@@ -80,6 +80,10 @@ def convert_dict_in_obj_list(list_obj, type_obj):
     if type_obj == 'yt_vid':
         for obj in list_obj:
             new_list.append(yt_vid.Video(obj['link'], obj['name']))
+
+    if type_obj == 'quote':
+        for obj in list_obj:
+            new_list.append(quote.Quote(obj['creator'], obj['quote']))
 
     return new_list
 
@@ -260,3 +264,6 @@ def get_titles(current_user):
 
 def set_cursor_to_begin():
     [current_user.set_cursor_to_start() for current_user in var.users]
+
+
+
