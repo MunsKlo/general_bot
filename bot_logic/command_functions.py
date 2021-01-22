@@ -243,3 +243,17 @@ def handle_notes(parameters):
     InputOutputJSON.write_json_file(var.users, var.users_file)
 
     return result
+
+def get_quote(parameters):
+    if parameters[1] == 'add' and len(parameters) == 3:
+        current_quote = quote.Quote(str(parameters[0].author), parameters[2])
+        var.quotes.append(current_quote)
+        InputOutputJSON.write_json_file(var.quotes, var.quotes_file)
+        return "Erfolgreich hinzugefügt!"
+
+    if parameters[1] == 'rand' and len(parameters) == 2:
+        current_quote = random.choice(var.quotes)
+        return f"{current_quote.creator} lehrte uns:" \
+               f"```{current_quote.quote}```"
+
+    return "Something went wrong"
