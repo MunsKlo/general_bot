@@ -8,6 +8,7 @@ users_file = 'users.json'
 important_messages_file = 'important_messages.json'
 yt_vids_file = 'yt_vids.json'
 msgs_file = 'msgs.json'
+quotes_file = "quotes.json"
 
 #CheckStates
 path_data = ''
@@ -28,6 +29,7 @@ helper = {
     ".cat": "Give you a random cat picture",
     ".dog": "Give you a random dog picture",
     ".fox": "Give you a random fox picture",
+    ".stalk": "Nici incoming!",
     "Helpful": '',
     ".jn <question>": "Get a yes or no answer to a question",
     ".number <number>": "Get a random number ",
@@ -54,3 +56,5 @@ helper = {
 }
 
 msgs = {}
+
+quotes = []

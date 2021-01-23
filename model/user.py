@@ -1,11 +1,12 @@
 class User:
 
-    def __init__(self, _id, _name, _msg_cursor=''):
+    def __init__(self, _id, _name, _mention, _msg_cursor=''):
         self.id = _id
         self.name = _name
         self.status = ""
         self.role = ""
         self.msg_cursor = _msg_cursor
+        self.mention = _mention
 
     def msg_cursor_next(self, next_cat):
         if len(self.msg_cursor):
