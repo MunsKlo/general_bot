@@ -18,6 +18,5 @@ commandHandler = {
   "dog": comFunc.get_dog_pic,
   "fox": comFunc.get_fox_pic,
   'msg': comFunc.handle_notes,
-  'stalk': comFunc.get_stalker,
   'quote': comFunc.get_quote,
 }
