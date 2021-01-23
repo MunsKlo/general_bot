@@ -5,7 +5,7 @@ from bot_logic import admin_logic, functions_bot
 from data import InputOutputJSON
 from variables import variables as var
 
-token = os.environ.get('token_raski')
+token = os.environ.get('token')
 
 comHandler = commandHandler.commandHandler.commandHandler
 
