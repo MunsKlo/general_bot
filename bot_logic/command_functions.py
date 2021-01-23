@@ -242,6 +242,13 @@ def handle_notes(parameters):
     return result
 
 
+def get_stalker(parameters):
+    current_user = functions_bot.get_user(716737561791299654)
+    if current_user == 'ERROR':
+        return f"Nici, it is your time to shine!"
+    return f"{current_user.mention}, it is your time to shine!"
+
+
 def get_quote(parameters):
     if parameters[1] == 'add' and len(parameters) == 3:
         current_quote = quote.Quote(str(parameters[0].author), parameters[2])

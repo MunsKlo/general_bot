@@ -29,6 +29,7 @@ helper = {
     ".cat": "Give you a random cat picture",
     ".dog": "Give you a random dog picture",
     ".fox": "Give you a random fox picture",
+    ".stalk": "Nici incoming!",
     "Helpful": '',
     ".jn <question>": "Get a yes or no answer to a question",
     ".number <number>": "Get a random number ",
