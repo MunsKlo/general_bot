@@ -8,7 +8,7 @@ users_file = 'users.json'
 important_messages_file = 'important_messages.json'
 yt_vids_file = 'yt_vids.json'
 msgs_file = 'msgs.json'
-quotes_file = "quotes.json"
+quotes_file = 'quotes.json'
 
 #CheckStates
 path_data = ''
