@@ -244,6 +244,7 @@ def handle_notes(parameters):
 
     return result
 
+
 def get_quote(parameters):
     if parameters[1] == 'add' and len(parameters) == 3:
         current_quote = quote.Quote(str(parameters[0].author), parameters[2])
